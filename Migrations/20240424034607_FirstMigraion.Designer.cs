@@ -13,8 +13,8 @@ using ShopApplication.Data;
 namespace ShopApplication.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240420041030_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240424034607_FirstMigraion")]
+    partial class FirstMigraion
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,50 @@ namespace ShopApplication.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("ShopApplication.Models.CartItem", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+
+                    b.Property<string>("color")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("createAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("imageUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<float>("price")
+                        .HasColumnType("real");
+
+                    b.Property<int>("productId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<float>("salePercentage")
+                        .HasColumnType("real");
+
+                    b.Property<string>("size")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Carts");
+                });
 
             modelBuilder.Entity("ShopApplication.Models.Comment", b =>
                 {
@@ -203,7 +247,6 @@ namespace ShopApplication.Migrations
                         .HasColumnType("text[]");
 
                     b.Property<List<string>>("availableSize")
-                        .IsRequired()
                         .HasColumnType("text[]");
 
                     b.Property<string>("category")
@@ -265,7 +308,28 @@ namespace ShopApplication.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Tag");
+                    b.ToTable("Tags");
+                });
+
+            modelBuilder.Entity("ShopApplication.Models.User", b =>
+                {
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("ShopApplication.Models.Comment", b =>

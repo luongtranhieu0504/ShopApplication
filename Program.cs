@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using ShopApplication.Data;
 using ShopApplication.Interface;
 using ShopApplication.Repository;
+using System.Text;
 
 namespace ShopApplication
 {
@@ -17,7 +20,24 @@ namespace ShopApplication
 			/*builder.Services.AddTransient<SeedData>();*/
 			/*			builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 			*/
+			var supabaseJwtSecretKey = "U6twGBJEf11mMFk5VscK2w3k7YO9jk3wZZ9k5OyKe+PQ628xvG7I5CGCTXUpMcw8hYXRULF/gmcMn2wui3bOdA==";
+			var supabaseSignatureKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(supabaseJwtSecretKey));
+			var validIssuer = "https://pepiwahqzfqojffolhaq.supabase.co/auth/v1";
+			var validAudiences = new List<string> { "authenticated" };
+			builder.Services.AddAuthentication().AddJwtBearer(options =>
+			{
+				options.TokenValidationParameters = new TokenValidationParameters
+				{
+					ValidateIssuerSigningKey = true,
+					IssuerSigningKey = supabaseSignatureKey,
+					ValidAudiences = validAudiences,
+					ValidIssuer = validIssuer
+				};
+			});
+	
+
 			builder.Services.AddScoped<IProductRepository, ProductRepository>();
+			builder.Services.AddScoped<ICartRepository, CartRepository>();
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
@@ -27,19 +47,6 @@ namespace ShopApplication
 
 			var app = builder.Build();
 
-			/*if (args.Length == 1 && args[0].ToLower() == "seeddata")
-				SeedData(app);
-
-			void SeedData(IHost app)
-			{
-				var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
-
-				using (var scope = scopedFactory.CreateScope())
-				{
-					var service = scope.ServiceProvider.GetService<SeedData>();
-					service.SeedDataContext();
-				}
-			}*/
 
 			// Configure the HTTP request pipeline.
 			if (app.Environment.IsDevelopment())

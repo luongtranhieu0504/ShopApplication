@@ -8,11 +8,32 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ShopApplication.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class FirstMigraion : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Carts",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    createAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    productId = table.Column<int>(type: "integer", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false),
+                    imageUrl = table.Column<string>(type: "text", nullable: false),
+                    price = table.Column<float>(type: "real", nullable: false),
+                    salePercentage = table.Column<float>(type: "real", nullable: false),
+                    size = table.Column<string>(type: "text", nullable: false),
+                    color = table.Column<string>(type: "text", nullable: false),
+                    quantity = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Carts", x => x.id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
@@ -55,7 +76,7 @@ namespace ShopApplication.Migrations
                     imageUrl = table.Column<string>(type: "text", nullable: false),
                     status = table.Column<string>(type: "text", nullable: false),
                     category = table.Column<string>(type: "text", nullable: false),
-                    availableSize = table.Column<List<string>>(type: "text[]", nullable: false),
+                    availableSize = table.Column<List<string>>(type: "text[]", nullable: true),
                     availableColor = table.Column<List<string>>(type: "text[]", nullable: false)
                 },
                 constraints: table =>
@@ -64,7 +85,7 @@ namespace ShopApplication.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tag",
+                name: "Tags",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
@@ -73,7 +94,21 @@ namespace ShopApplication.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tag", x => x.id);
+                    table.PrimaryKey("PK_Tags", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
@@ -167,9 +202,9 @@ namespace ShopApplication.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductTag_Tag_TagId",
+                        name: "FK_ProductTag_Tags_TagId",
                         column: x => x.TagId,
-                        principalTable: "Tag",
+                        principalTable: "Tags",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -199,6 +234,9 @@ namespace ShopApplication.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Carts");
+
+            migrationBuilder.DropTable(
                 name: "Comments");
 
             migrationBuilder.DropTable(
@@ -211,13 +249,16 @@ namespace ShopApplication.Migrations
                 name: "ProductTag");
 
             migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Tag");
+                name: "Tags");
         }
     }
 }

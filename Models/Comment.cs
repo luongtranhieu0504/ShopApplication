@@ -1,4 +1,5 @@
-﻿using Postgrest.Attributes;
+﻿
+using Supabase.Postgrest.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace ShopApplication.Models

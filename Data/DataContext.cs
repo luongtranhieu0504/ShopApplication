@@ -10,6 +10,9 @@ namespace ShopApplication.Data
         public DbSet<Image> Images { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Product> Products { get; set; }
+		public DbSet<Tag> Tags { get; set; }
+		public DbSet<CartItem> Carts { get; set; }
+		public DbSet<User> Users { get; set; }
 
 		public DataContext(DbContextOptions<DataContext> options) : base(options)
 		{
@@ -17,7 +20,11 @@ namespace ShopApplication.Data
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Comment>()
+			modelBuilder.Entity<User>().Property(u => u.UserId).IsRequired();
+			modelBuilder.Entity<User>().Property(u => u.PasswordHash).IsRequired();
+			modelBuilder.Entity<User>().Property(u => u.Email).IsRequired();
+
+			modelBuilder.Entity<Comment>()
             .HasOne(c => c.product)
             .WithMany(p => p.comments)
             .HasForeignKey(c => c.productId);
