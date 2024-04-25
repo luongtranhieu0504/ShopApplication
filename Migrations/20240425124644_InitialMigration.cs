@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -8,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ShopApplication.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstMigraion : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -76,8 +75,8 @@ namespace ShopApplication.Migrations
                     imageUrl = table.Column<string>(type: "text", nullable: false),
                     status = table.Column<string>(type: "text", nullable: false),
                     category = table.Column<string>(type: "text", nullable: false),
-                    availableSize = table.Column<List<string>>(type: "text[]", nullable: true),
-                    availableColor = table.Column<List<string>>(type: "text[]", nullable: false)
+                    availableSize = table.Column<string>(type: "text", nullable: false),
+                    availableColor = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -101,14 +100,17 @@ namespace ShopApplication.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    UserId = table.Column<int>(type: "integer", nullable: false)
+                    id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    PasswordHash = table.Column<string>(type: "text", nullable: false)
+                    email = table.Column<string>(type: "text", nullable: false),
+                    profileImage = table.Column<string>(type: "text", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false),
+                    phoneNumber = table.Column<string>(type: "text", nullable: false),
+                    passwordHash = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.UserId);
+                    table.PrimaryKey("PK_Users", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -140,9 +142,6 @@ namespace ShopApplication.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     url = table.Column<string>(type: "text", nullable: true),
-                    width = table.Column<int>(type: "integer", nullable: false),
-                    height = table.Column<int>(type: "integer", nullable: false),
-                    createAT = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     producId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>

@@ -10,14 +10,8 @@ namespace ShopApplication.Models
 		public int id { get; set; }
 		[Column("url")]
 		public string? url { get; set; }
-		[Column("width")]
-		public int width { get; set; }
-		[Column("height")]
-		public int height { get; set; }
-		[Column("create_at")]
-		public DateTime createAT { get; set; }
 		[Column("product_id")]
 		public int producId { get; set; }
-		public Product? product { get; set; }
+		public virtual Product product { get; set; }
 	}
 }
