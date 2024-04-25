@@ -26,22 +26,17 @@ namespace ShopApplication
                 imageUrl = "https://example.com/image1.jpg",
                 status = "Active",
                 category = "Tops",
-                availableSize = {"Medium" },
+                availableSize = "Medium" ,
                 images = new List<Image>
                 {
                     new Image
                     {
                         url = "https://example.com/image1.jpg",
-                        width = 100,
-                        height = 100,
-                        createAT = DateTime.Now
                     },
                     new Image
                     {
                         url = "https://example.com/image2.jpg",
-                        width = 200,
-                        height = 200,
-                        createAT = DateTime.Now
+     
                     }
                 },
                 comments = new List<Comment>

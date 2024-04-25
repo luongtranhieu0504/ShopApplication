@@ -2,25 +2,13 @@
 {
 	public class User
 	{
-		public int UserId { get; set; }
-		public string Email { get; set; }
-		public string PasswordHash { get; set; }
+		public int id { get; set; }
+		public string email { get; set; }
+		public string profileImage { get; set; }
+		public string name { get; set; }
+		public string phoneNumber { get; set; }
+		public string passwordHash { get; set; }
+
 	}
 
-	public class RegisterRequest
-	{
-		public string Email { get; set; }
-		public string Password { get; set; }
-	}
-
-	public class LoginRequest
-	{
-		public string Email { get; set; }
-		public string Password { get; set; }
-	}
-
-	public class TokenResponse
-	{
-		public string Token { get; set; }
-	}
 }

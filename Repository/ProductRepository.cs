@@ -4,6 +4,7 @@ using ShopApplication.Interface;
 using System.Data;
 using ShopApplication.Data;
 using Microsoft.EntityFrameworkCore;
+using ShopApplication.DTO;
 
 namespace ShopApplication.Repository
 {
@@ -29,10 +30,32 @@ namespace ShopApplication.Repository
 									.ToList();
 		}
 
-		public Product GetProductDetail(int productId)
+		public List<Image> GetImagesByProductId(int productId)
 		{
-			return _context.Products.Include(p => p.images).Include(p => p.comments)
-									.FirstOrDefault(p => p.id == productId);
+			return _context.Images.Where(i => i.producId == productId).ToList();
+		}
+		public ProductDTO GetProductDetail(int productId)
+		{
+			var product = _context.Products.FirstOrDefault(p => p.id == productId);
+			if (product != null)
+			{
+				var imageUrls = _context.Images.Where(i => i.producId == productId).Select(i => i.url).ToList();
+				var productDto = new ProductDTO
+				{
+					id = product.id,
+					name = product.name,
+					price= product.price,
+					salePercentage= product.salePercentage,
+					imageUrl = product.imageUrl,
+					status= product.status,
+					category= product.category,
+					availableSize= product.availableSize,
+					availableColor= product.availableColor,
+					images = imageUrls
+				};
+				return productDto;
+			}
+			return null;
 		}
 
 		public ICollection<Product> SearchProduct(string keyword)
@@ -47,12 +70,22 @@ namespace ShopApplication.Repository
 									.ToList();
 		}
 
-		public ICollection<Product> FilterProductByCategoryAndTag(string category, string tag)
+		public ICollection<ProductDTO> FilterProductByCategoryAndTag(string category, string tag)
 		{
-			return _context.Products.Include(p => p.productTags)
-									.Where(p => p.category == category &&
-												p.productTags.Any(pt => pt.Tag.nameTag == tag))
-									.ToList();
+			
+			return _context.Products
+	.Include(p => p.productTags)
+		.ThenInclude(pt => pt.Tag)
+	.Where(p => p.category == category &&
+				p.productTags.Any(pt => pt.Tag.nameTag == tag))
+	.Select(p => new ProductDTO
+	{
+		id = p.id,
+		name = p.name,
+		price = p.price,
+		imageUrl = p.imageUrl
+	})
+	.ToList();
 		}
 
 		public ICollection<Product> FilterProductByPriceRangeAndTag(float minPrice, float maxPrice, string tag)

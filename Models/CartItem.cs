@@ -28,7 +28,6 @@ namespace ShopApplication.Models
 		public string color { get; set; }
 		[Column("quantity")]
 		public int quantity { get; set; }
-		// Các thuộc tính khác nếu cần thiết
 
 	}
 }
