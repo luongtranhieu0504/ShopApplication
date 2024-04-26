@@ -70,9 +70,12 @@ namespace ShopApplication
 			{
 				app.UseSwagger();
 				app.UseSwaggerUI();
+            app.UseHsts();
 			}
 
 			app.UseHttpsRedirection();
+         app.UseStaticFiles();
+         app.UseRouting();
 
 			app.UseAuthorization();
 
