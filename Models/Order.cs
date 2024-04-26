@@ -40,6 +40,10 @@ namespace ShopApplication.Models
 		public string region { get; set;}
 		[Column("postal_code")]
 		public string postalCode { get; set;}
+		public string cardNumber { get; set;}
+		public string nameCard { get; set;}
+		public string expirationDate { get; set;}
+		public string CVC { get; set;}
 		public List<OrderToProduct> orderToCarts { get; set; }
 	}
 }

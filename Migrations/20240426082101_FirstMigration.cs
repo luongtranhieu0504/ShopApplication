@@ -54,7 +54,11 @@ namespace ShopApplication.Migrations
                     address = table.Column<string>(type: "text", nullable: false),
                     city = table.Column<string>(type: "text", nullable: false),
                     region = table.Column<string>(type: "text", nullable: false),
-                    postalCode = table.Column<string>(type: "text", nullable: false)
+                    postalCode = table.Column<string>(type: "text", nullable: false),
+                    cardNumber = table.Column<string>(type: "text", nullable: false),
+                    nameCard = table.Column<string>(type: "text", nullable: false),
+                    expirationDate = table.Column<string>(type: "text", nullable: false),
+                    CVC = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {

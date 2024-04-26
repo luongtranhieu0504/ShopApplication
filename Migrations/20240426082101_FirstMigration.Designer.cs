@@ -12,7 +12,7 @@ using ShopApplication.Data;
 namespace ShopApplication.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240426075037_FirstMigration")]
+    [Migration("20240426082101_FirstMigration")]
     partial class FirstMigration
     {
         /// <inheritdoc />
@@ -125,7 +125,15 @@ namespace ShopApplication.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
+                    b.Property<string>("CVC")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("address")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("cardNumber")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -143,12 +151,20 @@ namespace ShopApplication.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("expirationDate")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("fullName")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("itemsCount")
                         .HasColumnType("integer");
+
+                    b.Property<string>("nameCard")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("paymentMethod")
                         .IsRequired()
