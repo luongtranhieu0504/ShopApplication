@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ShopApplication.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class FirstMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -54,8 +54,7 @@ namespace ShopApplication.Migrations
                     address = table.Column<string>(type: "text", nullable: false),
                     city = table.Column<string>(type: "text", nullable: false),
                     region = table.Column<string>(type: "text", nullable: false),
-                    postalCode = table.Column<string>(type: "text", nullable: false),
-                    size = table.Column<string>(type: "text", nullable: false)
+                    postalCode = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -114,6 +113,25 @@ namespace ShopApplication.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OrderToProduct",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    orderId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderToProduct", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_OrderToProduct_Orders_orderId",
+                        column: x => x.orderId,
+                        principalTable: "Orders",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
                 {
@@ -156,35 +174,6 @@ namespace ShopApplication.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderToProduct",
-                columns: table => new
-                {
-                    OrderId = table.Column<int>(type: "integer", nullable: false),
-                    ProductId = table.Column<int>(type: "integer", nullable: false),
-                    ProductName = table.Column<string>(type: "text", nullable: false),
-                    amountItem = table.Column<int>(type: "integer", nullable: false),
-                    ProductPrice = table.Column<float>(type: "real", nullable: false),
-                    color = table.Column<string>(type: "text", nullable: false),
-                    size = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OrderToProduct", x => new { x.OrderId, x.ProductId });
-                    table.ForeignKey(
-                        name: "FK_OrderToProduct_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrderToProduct_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ProductTag",
                 columns: table => new
                 {
@@ -219,9 +208,9 @@ namespace ShopApplication.Migrations
                 column: "producId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderToProduct_ProductId",
+                name: "IX_OrderToProduct_orderId",
                 table: "OrderToProduct",
-                column: "ProductId");
+                column: "orderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductTag_TagId",

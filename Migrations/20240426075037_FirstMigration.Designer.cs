@@ -12,8 +12,8 @@ using ShopApplication.Data;
 namespace ShopApplication.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240425124644_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20240426075037_FirstMigration")]
+    partial class FirstMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -173,10 +173,6 @@ namespace ShopApplication.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("size")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("status")
                         .IsRequired()
                         .HasColumnType("text");
@@ -194,32 +190,18 @@ namespace ShopApplication.Migrations
 
             modelBuilder.Entity("ShopApplication.Models.OrderToProduct", b =>
                 {
-                    b.Property<int>("OrderId")
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    b.Property<int>("ProductId")
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+
+                    b.Property<int>("orderId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.HasKey("id");
 
-                    b.Property<float>("ProductPrice")
-                        .HasColumnType("real");
-
-                    b.Property<int>("amountItem")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("color")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("size")
-                        .HasColumnType("text");
-
-                    b.HasKey("OrderId", "ProductId");
-
-                    b.HasIndex("ProductId");
+                    b.HasIndex("orderId");
 
                     b.ToTable("OrderToProduct");
                 });
@@ -359,21 +341,13 @@ namespace ShopApplication.Migrations
 
             modelBuilder.Entity("ShopApplication.Models.OrderToProduct", b =>
                 {
-                    b.HasOne("ShopApplication.Models.Order", "Order")
-                        .WithMany("orderToProducts")
-                        .HasForeignKey("OrderId")
+                    b.HasOne("ShopApplication.Models.Order", "order")
+                        .WithMany("orderToCarts")
+                        .HasForeignKey("orderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShopApplication.Models.Product", "Product")
-                        .WithMany("orderToProducts")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
+                    b.Navigation("order");
                 });
 
             modelBuilder.Entity("ShopApplication.Models.ProductTag", b =>
@@ -397,7 +371,7 @@ namespace ShopApplication.Migrations
 
             modelBuilder.Entity("ShopApplication.Models.Order", b =>
                 {
-                    b.Navigation("orderToProducts");
+                    b.Navigation("orderToCarts");
                 });
 
             modelBuilder.Entity("ShopApplication.Models.Product", b =>
@@ -405,8 +379,6 @@ namespace ShopApplication.Migrations
                     b.Navigation("comments");
 
                     b.Navigation("images");
-
-                    b.Navigation("orderToProducts");
 
                     b.Navigation("productTags");
                 });

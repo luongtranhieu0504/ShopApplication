@@ -40,8 +40,6 @@ namespace ShopApplication.Models
 		public string region { get; set;}
 		[Column("postal_code")]
 		public string postalCode { get; set;}
-		[Column("size")]
-		public string size { get; set; }
-		public List<OrderToProduct> orderToProducts { get; set; }
+		public List<OrderToProduct> orderToCarts { get; set; }
 	}
 }

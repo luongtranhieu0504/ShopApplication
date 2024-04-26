@@ -32,18 +32,10 @@ namespace ShopApplication.Data
                 .WithOne(i => i.product)
                 .HasForeignKey(i => i.producId);
 
-			modelBuilder.Entity<OrderToProduct>()
-				.HasKey(op => new { op.OrderId, op.ProductId });
-
-			modelBuilder.Entity<OrderToProduct>()
-				.HasOne(op => op.Order)
-				.WithMany(o => o.orderToProducts)
-				.HasForeignKey(op => op.OrderId);
-
-			modelBuilder.Entity<OrderToProduct>()
-				.HasOne(op => op.Product)
-				.WithMany(p => p.orderToProducts)
-				.HasForeignKey(op => op.ProductId);
+			modelBuilder.Entity<Order>()
+			.HasMany(o => o.orderToCarts) 
+			.WithOne(otc => otc.order)    
+			.HasForeignKey(otc => otc.orderId);
 
 			modelBuilder.Entity<ProductTag>()
 	            .HasKey(pt => new { pt.ProductId, pt.TagId });

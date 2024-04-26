@@ -9,6 +9,7 @@ namespace ShopApplication.Helper
 		public MappingProfiles() { 
 
 			CreateMap<Product,ProductDTO>();
+			CreateMap<OrderDTO,Order>();
 		}
 	}
 }

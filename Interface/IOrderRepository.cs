@@ -6,8 +6,9 @@ namespace ShopApplication.Interface
 {
     public interface IOrderRepository
     {
-        Task Checkout(Order order);
-        Task<List<Order>> GetAllOrders();
+        Task<Order> Checkout(Order Check);
+
+		Task<List<Order>> GetAllOrders();
     }
 }
 

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using ShopApplication.DTO;
 using ShopApplication.Interface;
 using ShopApplication.Models;
 using System;
@@ -12,10 +14,12 @@ namespace ShopApplication.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderRepository _orderRepository;
+		private readonly IMapper _mapper;
 
-        public OrderController(IOrderRepository orderRepository)
+        public OrderController(IOrderRepository orderRepository, IMapper mapper)
         {
-            _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
+            _orderRepository = orderRepository ;
+			_mapper = mapper ;
         }
 
         [HttpGet]
@@ -25,17 +29,24 @@ namespace ShopApplication.Controllers
             return Ok(orders);
         }
 
-        [HttpPost("checkout")]
-        public async Task<ActionResult<Order>> Checkout(Order order)
-        {
-            try
-            {
-                return CreatedAtAction(nameof(GetOrders), new { id = (await _orderRepository.Checkout(order)).Id }, await _orderRepository.Checkout(order));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-    }
+		[HttpPost("checkout")]
+		public async Task<IActionResult> Checkout([FromBody] OrderDTO orderDTO)
+		{
+			try
+			{
+				// Sử dụng AutoMapper để ánh xạ dữ liệu từ OrderDTO sang Order
+				var order = _mapper.Map<Order>(orderDTO);
+
+				// Gọi phương thức trong repository để thêm Order vào cơ sở dữ liệu
+				var newOrder = await _orderRepository.Checkout(order);
+
+				return Ok(newOrder);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, new { message = "An error occurred while processing checkout", error = ex.Message });
+			}
+		}
+
+	}
 }

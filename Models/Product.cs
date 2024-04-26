@@ -26,7 +26,6 @@ namespace ShopApplication.Models
 		public string availableSize { get; set; }
 		[Column("available_color")]
 		public string availableColor { get; set; }
-		public List<OrderToProduct> orderToProducts { get; set; }
 		public List<Image> images { get; set; }
 		public List<Comment> comments { get; set; }
 		public List<ProductTag> productTags { get; set; }
